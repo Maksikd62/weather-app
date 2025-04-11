@@ -56,7 +56,7 @@ const WeatherWeekCard: React.FC<Props> = ({ data, selectedDay, setSelectedDay })
                         <Text style={styles.tableTitle}>Details for {formatDate(selectedDay)}</Text>
 
                         <View style={styles.tableHeader}>
-                            <Text style={[styles.tableCell, styles.headerCell]}></Text>
+                            <View style={styles.nameCell} />
                             {data[selectedDay].map((hour, index) => (
                                 <Text key={index} style={[styles.tableCell, styles.headerCell]}>
                                     {hour.time}
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     },
     tableHeader: {
         flexDirection: "row",
-        justifyContent: "center", 
+        justifyContent: "center",
         marginBottom: 10,
     },
     tableRow: {

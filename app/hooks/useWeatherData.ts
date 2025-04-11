@@ -27,7 +27,7 @@ function useWeatherData(city: string) {
                 });
 
                 const mapped: WeatherData[] = filtered.map((item: any) => ({
-                    datetime: item.dt_txt, // <-- нове
+                    datetime: item.dt_txt,
                     time: item.dt_txt.split(" ")[1].slice(0, 5),
                     temperature: item.main.temp,
                     windSpeed: item.wind.speed,

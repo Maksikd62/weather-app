@@ -1,4 +1,5 @@
-export interface WeatherData {
+export type WeatherData = {
+    readonly id: number;
     datetime: string;
     time: string;
     temperature: number;
@@ -9,7 +10,7 @@ export interface WeatherData {
   }
   
 
-export interface WeatherState {
+export type WeatherState = {
     city: string;
     forecast: WeatherData[];
     loading: boolean;

@@ -1,14 +1,49 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React from "react";
+import { View, Text, Button, StyleSheet, ActivityIndicator } from "react-native";
+import HistoryItem from "./HistoryItem";
 
-const SearchHistory = () => {
-  return (
-    <View>
-      <Text>SearchHistory</Text>
-    </View>
-  )
+interface SearchHistoryComponentProps {
+  history: { id: number; city: string; date: string }[];
+  onClearHistory: () => void;
+  onCityPress: (city: string) => void;
+  loadingHistory: boolean;
 }
 
-export default SearchHistory
+const SearchHistoryComponent = ({ history, onClearHistory, onCityPress, loadingHistory }: SearchHistoryComponentProps) => {
+  return (
+    <View style={styles.container}>
+      {loadingHistory ? (
+        <ActivityIndicator size="large" />
+      ) : history.length === 0 ? (
+        <Text style={styles.emptyText}>Історія порожня</Text>
+      ) : (
+        history.map((entry) => (
+          <HistoryItem key={entry.id} city={entry.city} onPress={onCityPress} />
+        ))
+      )}
 
-const styles = StyleSheet.create({})
+      {history.length > 0 && (
+        <View style={styles.clearBtn}>
+          <Button title="Очистити історію пошуку" color="#d00" onPress={onClearHistory} />
+        </View>
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+  },
+  emptyText: {
+    textAlign: "center",
+    fontSize: 18,
+    color: "#999",
+    marginTop: 50,
+  },
+  clearBtn: {
+    marginTop: 20,
+  },
+});
+
+export default SearchHistoryComponent;

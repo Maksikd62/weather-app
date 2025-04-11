@@ -1,12 +1,14 @@
-import React, { useState } from "react";
-import { ScrollView, View, ActivityIndicator, Text, Alert, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { ScrollView, Text, ActivityIndicator, StyleSheet, Alert } from "react-native";
 import useWeatherData from "../hooks/useWeatherData";
 import SearchBar from "../../components/SearchBar";
 import WeatherDayCard from "../../components/WeatherDayCard";
 import WeatherWeekCard from "../../components/WeatherWeekCard";
+import { addCityToHistory, deleteOldCities } from "../../store/db";
+import { useCity } from "../contexts/cityContext";
 
 const HomeScreen = () => {
-  const [city, setCity] = useState("Kyiv");
+  const { city, setCity } = useCity();
   const { forecast, loading, error } = useWeatherData(city);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
@@ -16,21 +18,31 @@ const HomeScreen = () => {
     setCity(newCity);
   };
 
-  const next24h = forecast.slice(0, 4);
+  useEffect(() => {
+    if (!loading && !error && forecast.length > 0 && city) {
+      addCityToHistory(city);
+      deleteOldCities();
+    }
+  }, [forecast, city]);
+
+  const now = new Date();
+  const next24h = forecast
+    .filter(item => new Date(item.datetime) >= now)
+    .slice(0, 4);
+
   const today = new Date().toISOString().split("T")[0];
 
   const nextDays = forecast.reduce((acc: any, item) => {
     const dateObj = new Date(item.datetime);
     const dateKey = dateObj.toISOString().split("T")[0];
-    
+
     if (dateKey !== today) {
       acc[dateKey] = acc[dateKey] || [];
       acc[dateKey].push(item);
     }
-    
+
     return acc;
   }, {});
-  
 
   if (loading) return <ActivityIndicator size="large" />;
   if (error) {
@@ -58,8 +70,6 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
-
 const styles = StyleSheet.create({
   container: {
     padding: 16,
@@ -75,3 +85,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
+export default HomeScreen;

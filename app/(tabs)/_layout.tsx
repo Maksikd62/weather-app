@@ -25,7 +25,7 @@ export default function TabLayout() {
                     tabBarIcon:  ({ color }: { color: string }) => <TabBarIcon name="home" color={color} />
                 }} />
             <Tabs.Screen
-                name="searchHistory"
+                name="SearchHistory"
                 options={{
                     title: 'Search History',
                     tabBarIcon:  ({ color }: { color: string }) => <TabBarIcon name="search" color={color} />
