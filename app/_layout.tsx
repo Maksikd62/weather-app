@@ -1,15 +1,11 @@
 import { Stack } from 'expo-router';
 import { Suspense, useEffect } from 'react';
-import { ActivityIndicator, View, Text } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import { CityProvider } from './contexts/cityContext';
-import { init } from '../store/db';
+import { useNotifications } from './notifications';
 
 export default function RootLayout() {
-  useEffect(() => {
-    init().catch((err) => {
-      console.error("DB init error:", err);
-    });
-  }, []);
+  useNotifications();
 
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>

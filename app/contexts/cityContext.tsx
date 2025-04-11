@@ -15,7 +15,7 @@ export const CityProvider = ({ children }: { children: ReactNode }) => {
     const loadLastCity = async () => {
       const history = await getHistory();
       if (history.length > 0) {
-        setCity(history[history.length - 1].city);
+        setCity(history[0].city);
       } else {
         setCity('Kyiv');
       }
